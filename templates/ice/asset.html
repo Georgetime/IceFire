@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tag %}
+{% block header-css %}
+
+{% endblock %}
+{% block container-title %}Dashboard{% endblock %}
+{% block container-main %}
+{#    {{ table_ob.admin_class.list_display }}#}
+    {% include 'ice/model_obj_list_components.html' %}
+{% endblock %}
+{% block  bottom-js %}
+
+{% endblock %}
