@@ -2,11 +2,12 @@
 {% load static %}
 {% load custom_tag %}
 {% block header-css %}
-
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/DataTables/datatables.min.css' %}"/>
 {% endblock %}
 {% block container-title %}Dashboard{% endblock %}
 {% block container-main %}
 {#    {{ table_ob.admin_class.list_display }}#}
+    {% include 'ice/model_list_filter_component.html' %}
     {% include 'ice/model_obj_list_components.html' %}
 {% endblock %}
 {% block  bottom-js %}

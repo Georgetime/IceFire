@@ -5,7 +5,16 @@ from .myauth import UserProfile
 # Create your models here.
 
 class Asset(models.Model):
-    asset_type = models.ForeignKey('Asset_type', verbose_name=u'类型', on_delete=models.CASCADE)
+    asset_type_choices = (
+        ('Server', u"服务器"),
+        ('NetworkDevice', u"网络设备"),
+        ('SecurityDevice', u"安全设备"),
+        ('Software', u"软件资产"),
+        ('StorageDevice', u'存储设备'),
+        ('other', "其他设备"),
+    )
+
+    asset_type = models.CharField(choices=asset_type_choices, max_length=64, verbose_name=u'类型', default="Server")
     name = models.CharField(max_length=64, verbose_name=u'名称', unique=True)
     sn = models.CharField(u'SN号', max_length=128, unique=True)
     manufactory = models.ForeignKey('Manufactory', verbose_name=u'制造商', on_delete=models.CASCADE)
@@ -19,11 +28,11 @@ class Asset(models.Model):
     admin = models.ForeignKey('UserProfile', verbose_name=u'资产管理员', null=True, blank=True, on_delete=models.CASCADE)
     idc = models.ForeignKey('IDC', verbose_name=u'IDC机房', null=True, blank=True, on_delete=models.CASCADE)
 
-    status_choices = ((0, '在线'),
-                      (1, '已下线'),
-                      (2, '未知'),
-                      (3, '故障'),
-                      (4, '备用'),
+    status_choices = ((0, u'在线'),
+                      (1, u'已下线'),
+                      (2, u'未知'),
+                      (3, u'故障'),
+                      (4, u'备用'),
                       )
     status = models.SmallIntegerField(choices=status_choices, verbose_name=u'状态', default=2)
     memo = models.TextField(u'备注', null=True, blank=True)
@@ -38,20 +47,20 @@ class Asset(models.Model):
         return '<id:%s name:%s>' % (self.id, self.name)
 
 
-class Asset_type(models.Model):
-    asset_type = models.CharField(max_length=64, default='server', unique=True)
-    asset_name = models.CharField(max_length=64)
-
-    def __str__(self):
-        return self.asset_name
+# class Asset_type(models.Model):
+#     asset_type = models.CharField(max_length=64, default='server', unique=True)
+#     asset_name = models.CharField(max_length=64)
+#
+#     def __str__(self):
+#         return self.asset_name
 
 
 class Server(models.Model):
     asset = models.ForeignKey('Asset', on_delete=models.CASCADE)
     sub_asset_type_choices = (
-        (0, 'PC服务器'),
-        (1, '刀片机'),
-        (2, '小型机'),
+        (0, u'PC服务器'),
+        (1, u'刀片机'),
+        (2, u'小型机'),
     )
     created_by_choices = (
         ('auto', 'Auto'),
@@ -100,11 +109,11 @@ class SecurityDevice(models.Model):
     """安全设备"""
     asset = models.OneToOneField('Asset', on_delete=models.CASCADE)
     sub_asset_type_choices = (
-        (0, '防火墙'),
-        (1, '入侵检测设备'),
-        (2, '互联网网关'),
-        (4, '运维审计系统'),
-        (5, '其他'),
+        (0, u'防火墙'),
+        (1, u'入侵检测设备'),
+        (2, u'互联网网关'),
+        (4, u'运维审计系统'),
+        (5, u'其他'),
     )
     sub_asset_type = models.SmallIntegerField(choices=sub_asset_type_choices, verbose_name="设备类型", default=0)
     config_file = models.TextField(null=True, blank=True)
@@ -117,10 +126,10 @@ class NetworkDevice(models.Model):
 
     asset = models.OneToOneField('Asset', on_delete=models.CASCADE)
     sub_asset_type_choices = (
-        (0, '路由器'),
-        (1, '交换机'),
-        (2, '负载均衡'),
-        (4, 'VPN设备'),
+        (0, u'路由器'),
+        (1, u'交换机'),
+        (2, u'负载均衡'),
+        (4, u'VPN设备'),
     )
     sub_asset_type = models.SmallIntegerField(choices=sub_asset_type_choices, verbose_name="服务器类型", default=0)
     vlan_ip = models.GenericIPAddressField(u'VlanIP', blank=True, null=True)
@@ -139,9 +148,9 @@ class Software(models.Model):
     only save software which purchased
     '''
     sub_asset_type_choices = (
-        (0, 'OS'),
-        (1, '办公\开发软件'),
-        (2, '业务软件'),
+        (0, u'OS'),
+        (1, u'办公\开发软件'),
+        (2, u'业务软件'),
 
     )
     sub_asset_type = models.SmallIntegerField(choices=sub_asset_type_choices, verbose_name="软件类型", default=0)

@@ -87,16 +87,18 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def __str__(self):              # __unicode__ on Python 2
-        return self.email
+        return self.name
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
         return True
+
     def has_perms(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
         return True
+
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
@@ -111,6 +113,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = u'用户信息'
         verbose_name_plural = u"用户信息"
+
     def __unicode__(self):
         return self.name
 

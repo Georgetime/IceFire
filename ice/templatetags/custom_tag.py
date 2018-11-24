@@ -33,7 +33,6 @@ def display_orderby_arrow(table_obj, loop_counter):
 @register.simple_tag
 def build_table_row(row_obj, table_obj, onclick_column=None, target_link=None):
     """
-
     :param row_obj:     每行项目的object
     :param table_obj:    整个table的对象
     :param onclick_column:
@@ -47,10 +46,11 @@ def build_table_row(row_obj, table_obj, onclick_column=None, target_link=None):
         except Exception as e:
             if hasattr(row_obj, column_name):
                 column_data = getattr(row_obj, column_name)
+                # print(column_data)
             else:
                 raise ValueError
         if column_name in table_obj.choice_fields:
-            column_data = getattr(row_obj, 'get_%s_display' % column_name)
+            column_data = getattr(row_obj, 'get_%s_display' % column_name)()
         if column_name in table_obj.fk_fields:
             column_data = getattr(row_obj, column_name).__str__()
         if onclick_column == column_name:
@@ -61,40 +61,41 @@ def build_table_row(row_obj, table_obj, onclick_column=None, target_link=None):
         # print(row_ele)
 
         # for dynamic display
-    if table_obj.dynamic_fk:
-        if hasattr(row_obj, table_obj.dynamic_fk):
-            # print("----dynamic:",getattr(row_obj,table_obj.dynamic_fk), row_obj)
-            # print(row_obj.networkdevice)
-            dy_fk = str(getattr(row_obj, table_obj.dynamic_fk))  # 拿到的是asset_type的值
-            if hasattr(row_obj, dy_fk):
-                dy_fk_obj = getattr(row_obj, dy_fk)
-                print("-->type", type(dy_fk_obj), dy_fk_obj)
-                for index, column_name in enumerate(table_obj.dynamic_list_display):
-                    if hasattr(dy_fk_obj, column_name):
-                        if column_name in table_obj.dynamic_choice_fields:
-                            column_data = getattr(dy_fk_obj, 'get_%s_display' % column_name)()
-                        else:
-                            column_data = dy_fk_obj._meta.get_field(column_name)._get_val_from_obj(dy_fk_obj)
-                        print("dynamic column data", column_data)
-
-                        column = "<td>%s</td>" % column_data
-                    else:
-                        column = "<td>n/a</td>"
-                    row_ele += column
-            else:
-                # 这个关联的表还没创建呢， 但也要创建空的html td占位符
-                for index, column_name in enumerate(table_obj.dynamic_list_display):
-                    row_ele += "<td></td>"
-
-    for field in table_obj.m2m_fields:
-        m2m_obj = getattr(row_obj, field)
-        column = "<td> "
-        for obj in m2m_obj.select_related():
-            column += "<span style='display:inline-block' class='label label-mint label-info'>%s</span>" % obj.__str__()
-        column += "</td>"
-        row_ele += column
+    # if table_obj.dynamic_fk:
+    #     if hasattr(row_obj, table_obj.dynamic_fk):
+    #         # print("----dynamic:",getattr(row_obj,table_obj.dynamic_fk), row_obj)
+    #         # print(row_obj.networkdevice)
+    #         dy_fk = getattr(row_obj, table_obj.dynamic_fk)  # 拿到的是asset_type的值
+    #         print(dy_fk)
+    #         if hasattr(row_obj, dy_fk):
+    #             dy_fk_obj = getattr(row_obj, dy_fk)
+    #             print("-->type", type(dy_fk_obj), dy_fk_obj)
+    #             for index, column_name in enumerate(table_obj.dynamic_list_display):
+    #                 if hasattr(dy_fk_obj, column_name):
+    #                     if column_name in table_obj.dynamic_choice_fields:
+    #                         column_data = getattr(dy_fk_obj, 'get_%s_display' % column_name)()
+    #                     else:
+    #                         column_data = dy_fk_obj._meta.get_field(column_name)._get_val_from_obj(dy_fk_obj)
+    #                     print("dynamic column data", column_data)
+    #
+    #                     column = "<td>%s</td>" % column_data
+    #                 else:
+    #                     column = "<td>n/a</td>"
+    #                 row_ele += column
+    #         else:
+    #             # 这个关联的表还没创建呢， 但也要创建空的html td占位符
+    #             for index, column_name in enumerate(table_obj.dynamic_list_display):
+    #                 row_ele += "<td></td>"
+    #
+    # for field in table_obj.m2m_fields:
+    #     m2m_obj = getattr(row_obj, field)
+    #     column = "<td> "
+    #     for obj in m2m_obj.select_related():
+    #         column += "<span style='display:inline-block' class='label label-mint label-info'>%s</span>" % obj.__str__()
+    #     column += "</td>"
+    #     row_ele += column
     row_ele += "</tr>"
-    print(row_ele)
+    # print(row_ele)
     return mark_safe(row_ele)
 
 
@@ -125,3 +126,8 @@ def render_page_num(request,paginator_obj,loop_counter):
             .format(abs_url=url ,page_num=loop_counter))
     else:
         return ''
+
+
+@register.filter
+def to_string(value):
+    return '%s' %value

@@ -69,7 +69,7 @@ class UserProfileAdmin(UserAdmin):
     list_filter = ('is_admin', )
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('tel', 'mobile', 'memo')}),
+        ('Personal info', {'fields': ('name', 'tel', 'mobile', 'memo')}),
         ('API TOKEN info', {'fields': ('token',)}),
         ('Permissions', {'fields': ('is_active', 'is_admin')}),
         ('账户有效期', {'fields': ('valid_begin_time', 'valid_end_time')}),
@@ -95,27 +95,23 @@ class ServerInline(admin.TabularInline):
 
 
 class AssetAdmin(admin.ModelAdmin):
-    list_display = ('id','asset_type', 'sn', 'name', 'manufactory', 'management_ip', 'idc', 'department', 'admin', 'trade_date', 'status')
+    list_display = ('id', 'asset_type', 'sn', 'name', 'manufactory', 'management_ip', 'idc', 'department', 'admin', 'trade_date', 'status')
     inlines = [ServerInline]
     search_fields = ['sn']
-    list_filter = ['idc','manufactory', 'department', 'asset_type']
-    choice_fields = ('status')
-    # choice_fields = ('asset_type','status')
+    # list_filter = ['idc','manufactory', 'department', 'asset_type']
+    # choice_fields = ('status')
+    choice_fields = ('asset_type', 'status')
     fk_fields = ('manufactory', 'idc', 'department', 'admin')
     list_per_page = 10
     list_filter = ('asset_type', 'status', 'manufactory', 'idc', 'department', 'admin', 'trade_date')
     dynamic_fk = 'asset_type'
-    dynamic_list_display = ('model', 'sub_asset_type', 'os_type', 'os_distribution')
+    # dynamic_list_display = ('model', 'sub_asset_type', 'os_type', 'os_distribution')
     dynamic_choice_fields = ('sub_asset_type',)
     m2m_fields = ('tags',)
 
 
-class Asset_typeAdmin(admin.ModelAdmin):
-    list_display = ('asset_name', 'asset_type')
-
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Asset, AssetAdmin)
-admin.site.register(Asset_type, Asset_typeAdmin)
 admin.site.register(Server)
 admin.site.register(IDC)
 admin.site.register(Department)

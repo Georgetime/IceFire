@@ -12,58 +12,55 @@
                     </a>
                 </th>
             {% endfor %}
-            {#            {% for column in table_obj.dynamic_list_display%}#}
-            {#                <th>#}
-            {#                    <a href="#">#}
-            {#                        {{ column }}#}
-            {#                        {% display_orderby_arrow table_obj forloop.counter0 %}#}
-            {#                    </a>#}
-            {#                </th>#}
-            {#            {% endfor %}#}
-            {#            {% for column in table_obj.m2m_fields %}#}
-            {#                <th class="">{{ column }}</th>#}
-            {#            {% endfor %}#}
+{#            {% for column in table_obj.dynamic_list_display%}#}
+{#                <th>#}
+{#                    <a href="#">#}
+{#                        {{ column }}#}
+{#                        {% display_orderby_arrow table_obj forloop.counter0 %}#}
+{#                    </a>#}
+{#                </th>#}
+{#            {% endfor %}#}
+{#            {% for column in table_obj.m2m_fields %}#}
+{#                <th class="">{{ column }}</th>#}
+{#            {% endfor %}#}
         </tr>
         </thead>
         <tbody>
         {% for row in table_obj.query_sets %}
-            <tr>
-                {#                {{ row }}#}
-                {% build_table_row row table_obj 'id' 'ice:asset_detail' %}
-            </tr>
+            {% build_table_row row table_obj 'id' 'ice:asset_detail' %}
         {% endfor %}
         </tbody>
-        <footer>
-            <tr>
-                <td colspan="12" class="footable-visible">
-                    <div class="pagination">
+        <tfoot>
+        <tr>
+            <td colspan="12" class="footable-visible">
+                <div class="pagination">
 
-                        <nav>
-                            <p>共{{ paginator.count }}条数据</p>
-                            <ul class="pagination">
-                                {% if table_obj.query_sets.has_previous %}
-                                    <li class="disabled">
-                                        <a href="{{ request.get_full_path }}?page={{ table_obj.query_sets.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                                    </li>
-                                {% endif %}
-                                {% for p_num in paginator.page_range %}
-                                    {% render_page_num request table_obj.query_sets p_num %}
-                                {% endfor %}
-                                {% if customer_list.has_next %}
-                                    <li>
-                                        <a href="{{ request.get_full_path }}?page={{ table_obj.query_sets.next_page_number }}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
+                    <nav>
+                        <p>共{{ paginator.count }}条数据</p>
+                        <ul class="pagination">
+                            {% if table_obj.query_sets.has_previous %}
+                                <li class="disabled">
+                                    <a href="{{ request.get_full_path }}?page={{ table_obj.query_sets.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                                </li>
+                            {% endif %}
+                            {% for p_num in paginator.page_range %}
+                                {% render_page_num request table_obj.query_sets p_num %}
+                            {% endfor %}
+                            {% if customer_list.has_next %}
+                                <li>
+                                    <a href="{{ request.get_full_path }}?page={{ table_obj.query_sets.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
 
-                    </div>    <!--end pagination-->
+                </div>    <!--end pagination-->
 
-                </td>
-            </tr>
-        </footer>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 
 </div>

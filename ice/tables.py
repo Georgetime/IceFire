@@ -56,14 +56,10 @@ class TableHandler(object):
         # for order by
         self.orderby_field = order_res[1]
         self.orderby_col_index = order_res[2]
-        self.dynamic_fk = getattr(admin_class, 'dynamic_fk') if \
-            hasattr(admin_class, 'dynamic_fk') else None
-        self.dynamic_list_display = getattr(admin_class, 'dynamic_list_display') if \
-            hasattr(admin_class, 'dynamic_list_display') else ()
-        self.dynamic_choice_fields = getattr(admin_class, 'dynamic_choice_fields') if \
-            hasattr(admin_class, 'dynamic_choice_fields') else ()
-        self.m2m_fields = getattr(admin_class, 'm2m_fields') if \
-            hasattr(admin_class, 'm2m_fields') else ()
+        self.dynamic_fk = getattr(admin_class, 'dynamic_fk') if hasattr(admin_class, 'dynamic_fk') else None
+        self.dynamic_list_display = getattr(admin_class, 'dynamic_list_display') if hasattr(admin_class, 'dynamic_list_display') else ()
+        self.dynamic_choice_fields = getattr(admin_class, 'dynamic_choice_fields') if hasattr(admin_class, 'dynamic_choice_fields') else ()
+        self.m2m_fields = getattr(admin_class, 'm2m_fields') if hasattr(admin_class, 'm2m_fields') else ()
 
 
     def get_list_filter(self, list_filter):
